@@ -1,9 +1,8 @@
 pub mod cell_state;
 
-use cell_state::CellState;
-
 extern crate ndarray;
 
+use cell_state::CellState;
 use ndarray::{Array, ArrayBase, Dim, OwnedRepr, ShapeBuilder};
 use ndarray_rand::rand_distr::Uniform;
 use ndarray_rand::RandomExt;
