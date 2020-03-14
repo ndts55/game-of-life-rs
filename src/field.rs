@@ -1,6 +1,3 @@
-extern crate ndarray;
-extern crate ndarray_rand;
-
 use super::cell_state::CellState;
 use ndarray::{Array, ArrayBase, Dim, OwnedRepr, ShapeBuilder};
 use ndarray_rand::rand_distr::Uniform;

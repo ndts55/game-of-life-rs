@@ -1,5 +1,3 @@
-extern crate ncurses;
-
 use super::field::{next_generation, random_field, Field};
 use ncurses::*;
 use std::thread::sleep;
@@ -31,7 +29,6 @@ fn start(field: Field, dur: Duration) {
         draw_field(&field);
         sleep(dur);
         field = next_generation(&field);
-        // check if field is same as before -> break
         // check if user entered q -> break
         if getch() == KEY_Q {
             break;
