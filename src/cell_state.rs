@@ -1,5 +1,6 @@
 use std::fmt;
 use CellState::{Dead, Live};
+use ncurses::chtype;
 
 #[derive(PartialEq, Copy, Clone, Debug)]
 pub enum CellState {
@@ -13,6 +14,15 @@ impl From<&u8> for CellState {
             0 => Dead,
             1 => Live,
             _ => panic!("panic"),
+        }
+    }
+}
+
+impl From<CellState> for chtype {
+    fn from(state: CellState) -> Self {
+        match state {
+            Dead => ' ' as chtype,
+            Live => '#' as chtype
         }
     }
 }

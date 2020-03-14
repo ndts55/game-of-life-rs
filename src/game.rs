@@ -1,36 +1,47 @@
 extern crate ncurses;
 
-use super::field::{Field, next_generation};
+use super::field::{next_generation, random_field, Field};
+use ncurses::*;
 use std::thread::sleep;
 use std::time::Duration;
-use ncurses::*;
 
 const KEY_Q: i32 = 113;
 
-pub fn play(field: Field, dur: Duration) {
+pub fn play() {
+    // TODO get window size and initialize field with that size
+    start(random_field((10, 20)), Duration::from_millis(250));
+}
+
+pub fn start(field: Field, dur: Duration) {
     let mut field = field;
-    initialize_ncurses(field.shape());
+    initialize_ncurses();
     loop {
         draw_field(&field);
         sleep(dur);
         field = next_generation(&field);
-        // check if field is empty -> break
+        // check if field is same as before -> break
         // check if user entered q -> break
         if getch() == KEY_Q {
             break;
         }
     }
+
+    endwin();
 }
 
-fn initialize_ncurses(dimensions: &[usize]) {
-    let window =  initscr();
+fn initialize_ncurses() {
+    let window = initscr();
     keypad(stdscr(), true);
     nodelay(window, true);
+    noecho();
 }
 
 fn draw_field(field: &Field) {
-    // just print for now
-    // TODO use ncurses
-    println!("{:8.4}", field);
-    print!("\n");
+    clear();
+    for ((y, x), &value) in field.indexed_iter() {
+        mv(y as i32, x as i32);
+        addch(chtype::from(value));
+    }
+
+    refresh();
 }
