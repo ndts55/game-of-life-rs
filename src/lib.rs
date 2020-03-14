@@ -1,4 +1,5 @@
 pub mod cell_state;
+pub mod game;
 
 extern crate ndarray;
 

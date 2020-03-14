@@ -1,9 +1,7 @@
-use game_of_life::{random_field, next_generation};
+use game_of_life::random_field;
+use game_of_life::game::play;
+use std::time::Duration;
 
 fn main() {
-    let a = random_field((10, 10));
-    let b = next_generation(&a);
-    println!("{:8.4}", a);
-    println!("");
-    println!("{:8.4}", b);
+    play(random_field((10, 10)), Duration::from_secs(1));
 }
