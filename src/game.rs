@@ -8,13 +8,25 @@ use std::time::Duration;
 const KEY_Q: i32 = 113;
 
 pub fn play() {
-    // TODO get window size and initialize field with that size
-    start(random_field((10, 20)), Duration::from_millis(250));
+    initialize_ncurses();
+    let mut width = 0;
+    let mut height = 0;
+    getmaxyx(stdscr(), &mut height, &mut width);
+    start(
+        random_field((height as usize, width as usize)),
+        Duration::from_millis(39),
+    );
 }
 
-pub fn start(field: Field, dur: Duration) {
+fn initialize_ncurses() {
+    let window = initscr();
+    keypad(stdscr(), true);
+    nodelay(window, true);
+    noecho();
+}
+
+fn start(field: Field, dur: Duration) {
     let mut field = field;
-    initialize_ncurses();
     loop {
         draw_field(&field);
         sleep(dur);
@@ -27,13 +39,6 @@ pub fn start(field: Field, dur: Duration) {
     }
 
     endwin();
-}
-
-fn initialize_ncurses() {
-    let window = initscr();
-    keypad(stdscr(), true);
-    nodelay(window, true);
-    noecho();
 }
 
 fn draw_field(field: &Field) {
