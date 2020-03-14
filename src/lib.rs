@@ -2,6 +2,7 @@ pub mod cell_state;
 pub mod game;
 
 extern crate ndarray;
+extern crate ndarray_rand;
 
 use cell_state::CellState;
 use ndarray::{Array, ArrayBase, Dim, OwnedRepr, ShapeBuilder};
