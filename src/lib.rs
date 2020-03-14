@@ -1,18 +1,51 @@
-extern crate ndarray;
-
-use ndarray::{Array, ArrayBase, Dim, OwnedRepr};
-
-type Field = ArrayBase<OwnedRepr<CellState>, Dim<[usize; 2]>>;
+use std::fmt;
+use CellState::{Dead, Live};
 
 #[derive(PartialEq, Copy, Clone, Debug)]
-enum CellState {
+pub enum CellState {
     Dead = 0,
     Live = 1,
 }
 
-use CellState::{Dead, Live};
+impl From<&u8> for CellState {
+    fn from(num: &u8) -> Self {
+        match num {
+            0 => Dead,
+            1 => Live,
+            _ => panic!("panic"),
+        }
+    }
+}
 
-fn next_generation(current_generation: &Field) -> Field {
+impl fmt::Display for CellState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Dead => " ",
+                Live => "#",
+            }
+        )
+    }
+}
+
+extern crate ndarray;
+
+use ndarray::{Array, ArrayBase, Dim, OwnedRepr, ShapeBuilder};
+use ndarray_rand::rand_distr::Uniform;
+use ndarray_rand::RandomExt;
+
+pub type Field = ArrayBase<OwnedRepr<CellState>, Dim<[usize; 2]>>;
+
+pub fn random_field<Sh>(size: Sh) -> Field
+where
+    Sh: ShapeBuilder<Dim = Dim<[usize; 2]>>,
+{
+    Array::random(size, Uniform::new_inclusive(0, 1)).map(CellState::from)
+}
+
+pub fn next_generation(current_generation: &Field) -> Field {
     Array::from_shape_vec(
         current_generation.raw_dim(),
         current_generation
@@ -79,19 +112,19 @@ mod next_generation_tests {
     #[test]
     fn blinker() {
         let horizontal: Field = array![
-            [Dead,Dead,Dead,Dead,Dead],
-            [Dead,Dead,Dead,Dead,Dead],
-            [Dead,Live,Live,Live,Dead],
-            [Dead,Dead,Dead,Dead,Dead],
-            [Dead,Dead,Dead,Dead,Dead]
+            [Dead, Dead, Dead, Dead, Dead],
+            [Dead, Dead, Dead, Dead, Dead],
+            [Dead, Live, Live, Live, Dead],
+            [Dead, Dead, Dead, Dead, Dead],
+            [Dead, Dead, Dead, Dead, Dead]
         ];
 
         let vertical: Field = array![
-            [Dead,Dead,Dead,Dead,Dead],
-            [Dead,Dead,Live,Dead,Dead],
-            [Dead,Dead,Live,Dead,Dead],
-            [Dead,Dead,Live,Dead,Dead],
-            [Dead,Dead,Dead,Dead,Dead]
+            [Dead, Dead, Dead, Dead, Dead],
+            [Dead, Dead, Live, Dead, Dead],
+            [Dead, Dead, Live, Dead, Dead],
+            [Dead, Dead, Live, Dead, Dead],
+            [Dead, Dead, Dead, Dead, Dead]
         ];
 
         assert_eq!(next_generation(&horizontal), vertical);
