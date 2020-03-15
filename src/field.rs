@@ -38,7 +38,7 @@ pub fn next_generation(current_generation: &Field) -> Field {
 }
 
 fn neighbour_indices(index: (usize, usize)) -> Vec<(usize, usize)> {
-    let index = (index.0 as i64, index.1 as i64);
+    let index = (index.0 as isize, index.1 as isize);
     [
         (0, 1),
         (1, 0),
