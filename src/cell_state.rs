@@ -1,4 +1,3 @@
-use std::fmt;
 use CellState::{Dead, Live};
 use ncurses::chtype;
 
@@ -22,20 +21,8 @@ impl From<CellState> for chtype {
     fn from(state: CellState) -> Self {
         match state {
             Dead => ' ' as chtype,
-            Live => '#' as chtype
+            Live => 'B' as chtype
         }
     }
 }
 
-impl fmt::Display for CellState {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}",
-            match self {
-                Dead => " ",
-                Live => "#",
-            }
-        )
-    }
-}
